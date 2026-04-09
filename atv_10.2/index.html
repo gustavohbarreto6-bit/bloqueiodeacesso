@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bloqueio de Acesso</title>
+
+    <style>
+        body{
+            font-family: Arial;
+            background-color: #0f172a;
+            color: white;
+            text-align: center;
+        }
+
+        main{
+            margin-top: 60px;
+        }
+
+        input{
+            display: block;
+            margin: 10px auto;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        #btnEntrar{
+            background-color: #1a1a1b;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #btnEntrar:hover{
+            background-color: #1d4ed8;
+            transform: scale(1.05);
+        }
+
+        #btnEntrar:active{
+            transform: scale(0.95);
+        }
+
+        #mensagem{
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Bloqueio de Acesso</h1>
+
+    <main>
+        <label>Digite seu login</label>
+        <input type="text" id="login" placeholder="Digite seu login">
+
+        <label>Digite sua senha</label>
+        <input type="password" id="senha" placeholder="Digite sua senha">
+
+        <button onclick="entrar()" id="btnEntrar">Entrar</button>
+
+        <div id="mensagem"></div>
+    </main>
+
+    <script>
+
+        const usuarios = [
+            {login: "admin", senha: "1234"},
+            {login: "gustavo", senha: "1111"},
+            {login: "mari", senha: "2222"}
+        ];
+
+        let tentativas = 3;
+
+        function entrar(){
+
+            let acessoLiberado = false;
+
+            do {
+                let login = document.getElementById("login").value;
+                let senha = document.getElementById("senha").value;
+                let msg = document.getElementById("mensagem");
+
+                acessoLiberado = usuarios.some(user =>
+                    user.login === login && user.senha === senha
+                );
+
+                if(acessoLiberado){
+                    msg.innerHTML = "✅ Acesso Liberado";
+                    msg.style.color = "lightgreen";
+                    break;
+                } else {
+                    tentativas--;
+
+                    if(tentativas > 0){
+                        msg.innerHTML = "❌ Login incorreto! Tentativas restantes: " + tentativas;
+                        msg.style.color = "orange";
+                        return;
+                    }
+                }
+
+            } while(!acessoLiberado && tentativas > 0);
+
+            if(tentativas === 0){
+                document.getElementById("mensagem").innerHTML =
+                "🚫 SISTEMA BLOQUEADO - Procure o Suporte";
+
+                document.getElementById("mensagem").style.color = "red";
+
+                // bloqueia o botão
+                document.getElementById("btnEntrar").disabled = true;
+            }
+        }
+
+    </script>
+
+</body>
+</html>
